@@ -1,6 +1,7 @@
-import express from 'express';
+import express, { Router, Request, Response } from 'express';
 import bodyParser from 'body-parser';
-import {filterImageFromURL, deleteLocalFiles} from './util/util';
+import { filterImageFromURL, deleteLocalFiles } from './util/util';
+require('dotenv').config();
 
 (async () => {
 
@@ -9,7 +10,7 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
 
   // Set the network port
   const port = process.env.PORT || 8082;
-  
+
   // Use the body parser middleware for post requests
   app.use(bodyParser.json());
 
@@ -28,19 +29,42 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
   //   the filtered image file [!!TIP res.sendFile(filteredpath); might be useful]
 
   /**************************************************************************** */
+  app.get("/filteredimage", async (req: Request, res: Response) => {
+    let image_url: any = req.query.image_url
+
+    if (!image_url) {
+      res.status(400)
+        .send("Failed!: You need to insert the image url")
+      return
+    }
+    try {
+      await filterImageFromURL(image_url).then(pathUrl => {
+        res.status(200)
+          .sendFile(pathUrl, () => {
+            deleteLocalFiles([pathUrl])
+          })
+      })
+    } catch (error) {
+      console.log(error);
+      
+      res.status(400)
+        .send(`filtering ${error.toString()}`)
+    }
+  })
 
   //! END @TODO1
-  
+
   // Root Endpoint
   // Displays a simple message to the user
-  app.get( "/", async ( req, res ) => {
-    res.send("try GET /filteredimage?image_url={{}}")
-  } );
-  
+  app.get("/", async (req, res) => {
+    res.status(200)
+      .send("try GET /filteredimage?image_url={{https://link.to.image.should.be.here.jpg}}")
+  });
+
 
   // Start the Server
-  app.listen( port, () => {
-      console.log( `server running http://localhost:${ port }` );
-      console.log( `press CTRL+C to stop server` );
-  } );
+  app.listen(port, () => {
+    console.log(`server running http://localhost:${port}`);
+    console.log(`press CTRL+C to stop server`);
+  });
 })();

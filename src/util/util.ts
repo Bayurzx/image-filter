@@ -10,18 +10,26 @@ import Jimp = require("jimp");
 //    an absolute path to a filtered image locally saved file
 export async function filterImageFromURL(inputURL: string): Promise<string> {
   return new Promise(async (resolve, reject) => {
+    const outpath = "/tmp/filtered_" + Math.floor(Math.random() * 2000) + ".jpg";
     try {
       const photo = await Jimp.read(inputURL);
-      const outpath =
-        "/tmp/filtered." + Math.floor(Math.random() * 2000) + ".jpg";
-      await photo
-        .resize(256, 256) // resize
-        .quality(60) // set JPEG quality
-        .greyscale() // set greyscale
-        .write(__dirname + outpath, (img) => {
-          resolve(__dirname + outpath);
-        });
+      try {
+        await photo
+          .resize(256, 256) // resize
+          .quality(60) // set JPEG quality
+          .greyscale() // set greyscale
+          .write(__dirname + outpath, (img) => {          
+            // console.log("Writing");
+            
+            resolve(__dirname + outpath);
+          });
+      } catch (error) {
+        console.log("Photo err:");
+        
+        reject(error)
+      }
     } catch (error) {
+      console.log("Filter err:");
       reject(error);
     }
   });
@@ -34,6 +42,12 @@ export async function filterImageFromURL(inputURL: string): Promise<string> {
 //    files: Array<string> an array of absolute paths to files
 export async function deleteLocalFiles(files: Array<string>) {
   for (let file of files) {
-    fs.unlinkSync(file);
+    console.log("file", file);
+    
+    if (fs.existsSync(file)) {
+      fs.unlinkSync(file);
+
+    }
+    console.log(`file: ${file.split("tmp/")[1]} was deleted`);
   }
 }
