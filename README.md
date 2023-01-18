@@ -1,48 +1,80 @@
-# Udagram Image Filtering Microservice
+Udagram Image Filter Microservice
+=====================================
 
-Udagram is a simple cloud application developed alongside the Udacity Cloud Engineering Nanodegree. It allows users to register and log into a web client, post photos to the feed, and process photos using an image filtering microservice.
+This is a Node.js application that allows users to filter and manipulate images using the Jimp module and the fs module. The filtered image can be posted to the client using the `res.status(200).sendFile` method.
 
-The project is split into three parts:
-1. [The Simple Frontend](https://github.com/udacity/cloud-developer/tree/master/course-02/exercises/udacity-c2-frontend)
-A basic Ionic client web application which consumes the RestAPI Backend. [Covered in the course]
-2. [The RestAPI Backend](https://github.com/udacity/cloud-developer/tree/master/course-02/exercises/udacity-c2-restapi), a Node-Express server which can be deployed to a cloud service. [Covered in the course]
-3. [The Image Filtering Microservice](https://github.com/udacity/cloud-developer/tree/master/course-02/project/image-filter-starter-code), the final project for the course. It is a Node-Express application which runs a simple script to process images. [Your assignment]
+## Home ('/')
+http://image-filter-dev2222.us-east-1.elasticbeanstalk.com/
 
-## Tasks
+## FilteredImage ('/filteredimage?')
+http://image-filter-dev2222.us-east-1.elasticbeanstalk.com/filteredimage?image_url=https://img.freepik.com/premium-photo/abstract-texture-cubic-geometric-color-background_305419-1919.jpg
 
-### Setup Node Environment
+Features
+--------
 
-You'll need to create a new node server. Open a new terminal within the project directory and run:
+-   Use of good cloud git process for version control
+-   Use of TypeScript and Node.js for development
+-   Understanding of RESTFUL design for API creation
+-   Understanding of HTTP status codes for handling responses
+-   Functional cloud deployments using Elastic Beanstalk
+-   Understanding of AWS Elastic Beanstalk's CLI and Console Dashboard for managing deployments
 
-1. Initialize a new project: `npm i`
-2. run the development server with `npm run dev`
+Requirements
+------------
 
-### Create a new endpoint in the server.ts file
+-   Node.js
+-   npm
+-   AWS Elastic Beanstalk CLI
 
-The starter code has a task for you to complete an endpoint in `./src/server.ts` which uses query parameter to download an image from a public URL, filter the image, and return the result.
+Installation
+------------
 
-We've included a few helper functions to handle some of these concepts and we're importing it for you at the top of the `./src/server.ts`  file.
+-  Clone the repository to your local machine
 
-```typescript
-import {filterImageFromURL, deleteLocalFiles} from './util/util';
+``` bash
+git clone https://github.com/bayurzx/image-filter.git
 ```
 
-### Deploying your system
 
-Follow the process described in the course to `eb init` a new application and `eb create` a new environment to deploy your image-filter service! Don't forget you can use `eb deploy` to push changes.
+-  Install the dependencies
 
-## Stand Out (Optional)
+``` bash
+npm install
+```
 
-### Refactor the course RESTapi
+-  Build the TypeScript files
 
-If you're feeling up to it, refactor the course RESTapi to make a request to your newly provisioned image server.
+``` bash
+npm run build
+```
 
-### Authentication
 
-Prevent requests without valid authentication headers.
-> !!NOTE if you choose to submit this, make sure to add the token to the postman collection and export the postman collection file to your submission so we can review!
+-  Deploy the application to Elastic Beanstalk
 
-### Custom Domain Name
+``` bash
+eb  init
+eb create
+```
 
-Add your own domain name and have it point to the running services (try adding a subdomain name to point to the processing server)
-> !NOTE: Domain names are not included in AWS’ free tier and will incur a cost.
+
+Usage
+-----
+
+-  Start the application
+
+
+
+``` bash
+npm run dev
+```
+
+
+-  Make a POST request to the `/filter` endpoint with the image attached as a form-data file
+-  The filtered image will be returned with a status code of 200.
+
+Note
+----
+
+Make sure you have the correct permissions for your IAM user to create and manage Elastic Beanstalk environments.
+
+The image-filter project originally created by `Udacity` is for educational and demonstration purposes only. Be sure to properly handle and validate user input before applying any image manipulation in a production environment.
