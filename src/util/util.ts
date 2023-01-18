@@ -48,6 +48,6 @@ export async function deleteLocalFiles(files: Array<string>) {
       fs.unlinkSync(file);
 
     }
-    console.log(`file: ${file.split("tmp/")[1]} was deleted`);
+    console.log(`file: ${file.split("tmp/")[1]} was deleted!`);
   }
 }
