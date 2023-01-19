@@ -30,7 +30,7 @@ require('dotenv').config();
 
   /**************************************************************************** */
   app.get("/filteredimage", async (req: Request, res: Response) => {
-    let image_url: any = req.query.image_url
+    let image_url:string = req.query.image_url.toString()
 
     if (!image_url) {
       res.status(400)
